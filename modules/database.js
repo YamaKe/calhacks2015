@@ -110,8 +110,8 @@ module.exports = {
             admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]));
         }
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $push: { admins : { $each: admin_id_array2 } } },
+            {_id: mongojs.ObjectId(hackathon_id)},
+            {$push: {admins: {$each: admin_id_array2}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -128,8 +128,8 @@ module.exports = {
             user_id_array2.push(mongojs.ObjectId(user_id_array[i]));
         }
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $push: { hackers : { $each: user_id_array2 } } },
+            {_id: mongojs.ObjectId(hackathon_id)},
+            {$push: {hackers: {$each: user_id_array2}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -141,8 +141,8 @@ module.exports = {
     },
     removeUserFromHackathon: function (hackathon_id, user_id, callback) {
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $pull: { hackers: { id: db.ObjectKey(user_id) } } },
+            {_id: mongojs.ObjectId(hackathon_id)},
+            {$pull: {hackers: {id: db.ObjectKey(user_id)}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -154,7 +154,7 @@ module.exports = {
     },
     getPushes: function (hackathon_id, callback) {
         // TODO: strip sensitive info from the request
-        db.hackathons.find( { _id: mongojs.ObjectId(hackathon_id) } , function (err, hackathons) {
+        db.hackathons.find({_id: mongojs.ObjectId(hackathon_id)}, function (err, hackathons) {
             if (err) {
                 callback(err);
             } else {
