@@ -64,7 +64,7 @@ module.exports = {
                 username:   req.body.username,
                 password:   req.body.password,
                 email:      req.body.email,
-                hacks:      [] 
+                hacks:      []
             };
             database.addUser(user, function (_id) {
                 res.send(_id);
@@ -97,7 +97,7 @@ module.exports = {
             var hackathon_id = req.body.hackathon_id;
             database.addUsertoHackathon(hackathon_id, user_id, function (hack_id) {
                 res.send(hack_id);
-            }
+            });
             return;
         });
 
