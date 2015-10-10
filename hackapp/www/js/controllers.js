@@ -15,6 +15,15 @@ angular.module('mainp.controllers', [])
     };
 })
 
+.controller('FunctionsCtrl', function($scope) {
+	$scope.functs = [
+		{ name: 'F1'},
+		{ name: 'F2'},
+		{ name: 'F3'},
+		{ name: 'F4'}
+	];
+});
+
 // .controller('NavCtrl', function($scope, $ionicPopup, $timeout) {
 
 //   $scope.go = function (path) {
