@@ -97,7 +97,7 @@ module.exports = {
             var hackathon_id = req.body.hackathon_id;
             database.addUserToHackathon(hackathon_id, user_id, function (hack_id) {
                 res.send(hack_id);
-            }
+            });
             return;
         });
         app.put(this.prefix + 'removeUserfromHackathon', function (req, res) {
