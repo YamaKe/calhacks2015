@@ -75,8 +75,8 @@ module.exports = {
             }
         });
     },
-    addHackathon: function (hackthon, callback) {
-        db.hackathons.save(user, function (err, saved) {
+    addHackathon: function (hackathon, callback) {
+        db.hackathons.save(hackathon, function (err, saved) {
             if (err) {
                 callback(err);
             } else {
@@ -84,5 +84,19 @@ module.exports = {
                 callback(saved._id);
             }
         });
+    },
+    addUsertoHackathon: function (hackathon_id, user_id, callback) {
+        db.hackathons.update(
+            { _id: db.objectkey(hackathon_id) },
+            { $push: { "hackers": user_id } },
+            function (err, saved) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        );
+
     }
 };

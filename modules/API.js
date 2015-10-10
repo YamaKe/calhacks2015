@@ -95,7 +95,9 @@ module.exports = {
         app.post(this.prefix + 'addUsertoHackathon', function (req, res) {
             var user_id   = req.body.user_id;
             var hackathon_id = req.body.hackathon_id;
-            //database.addUsertoHackathon(hackathon_id, user_id, function
+            database.addUsertoHackathon(hackathon_id, user_id, function (hack_id) {
+                res.send(hack_id);
+            }
             return;
         });
 
