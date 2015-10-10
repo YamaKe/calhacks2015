@@ -95,12 +95,19 @@ module.exports = {
         app.post(this.prefix + 'addUsertoHackathon', function (req, res) {
             var user_id   = req.body.user_id;
             var hackathon_id = req.body.hackathon_id;
-            database.addUsertoHackathon(hackathon_id, user_id, function (hack_id) {
+            database.addUserToHackathon(hackathon_id, user_id, function (hack_id) {
                 res.send(hack_id);
             }
             return;
         });
-
+        app.put(this.prefix + 'removeUserfromHackathon', function (req, res) {
+            var user_id   = req.body.user_id;
+            var hackathon_id = req.body.hackathon_id;
+            database.removeUserToHackathon(hackathon_id, user_id, function (hack_id) {
+                res.send(hack_id);
+            }
+            return;
+        });
         app.post(this.prefix + 'login/local', passport.authenticate('local', {failureRedirect: '/'}),
             function (req, res) {
                 // res.redirect('/');
