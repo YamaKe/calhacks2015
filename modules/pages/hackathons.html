@@ -1,0 +1,58 @@
+<html ng-app="RunHack">
+    {{header}}
+    <style>
+        .mdi {
+            font-size: 24px;
+        }
+    </style>
+    <body ng-controller="HackathonsController as ctrlHackathons">
+        <div layout="column" style="height:100%;" class="sidenavdemoBasicUsage">
+            <md-toolbar class="md-theme-red">
+                <div class="md-toolbar-tools">
+                    <md-button class="md-icon-button" aria-label="Settings" ng-click="toggleNavDrawer()">
+                        <i class='mdi mdi-menu'></i>
+                    </md-button>
+                    <h2>
+                        <span>{{ctrlHackathons.page.name}}</span>
+                    </h2>
+                    <span flex></span>
+                    <div>
+                        <md-button ng-repeat="toolbarItem in ctrlHackathons.toolbarItems | orderBy:'importance' | limitTo:3" ng-click="toolbarItem.onclick($event)" class="md-icon-button" aria-label="{{toolbarItem.title}}">
+                            <i class='mdi mdi-{{toolbarItem.icon}}'></i>
+                        </md-button>
+                    </div>
+                    <md-menu md-position-mode="target-right target" >
+                        <md-button aria-label="Open demo menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                            <i md-menu-origin class='mdi mdi-dots-vertical'></i>
+                        </md-button>
+                        <md-menu-content width="3" >
+                            <md-menu-item ng-repeat="toolbarItem in ctrlHackathons.toolbarItems | orderBy:'importance' | limitTo:'Infinity':3" ng-click="toolbarItem.onclick()">
+                                <md-button ng-click="ctrl.announceClick($index)">
+                                    <div layout="row">
+                                        <p flex>{{toolbarItem.title}}</p>
+                                    </div>
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
+            </md-toolbar>
+            <section layout="row" flex="">
+                <md-content flex="" layout-padding="" style="background-color:rgb(230, 230, 230);">
+                    <div layout="flex" layout-align="top center" style="display:flex; flex-wrap:wrap;">
+                        <md-card ng-repeat="hackathon in ctrlHackathons.hackathons">
+                            <md-card-content>
+                                <h2 class="md-title">{{hackathon.name}}</h2>
+
+                            </md-card-content>
+                        </md-card>
+                    </div>
+                    <div flex=""></div>
+                    <md-button class="md-fab" style="position: fixed; right: 0px; bottom: 0px;" aria-label="Generate Report" ng-click="showGenerateReportDialog($event)" aria-label="Generate Report">
+                        <i class='mdi mdi-plus'></i>
+                    </md-button>
+                </md-content>
+            </section>
+        </div>
+    </body>
+</html>

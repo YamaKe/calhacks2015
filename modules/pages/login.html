@@ -13,7 +13,21 @@
                         <div class="cell"><input type="password" class="material light" id="login_password" placeholder="Password" onkeydown="listenForReturnKey(event);" /><div class="error">You done goofed</div></div>
                     </div>
                     <div class="row" style="margin-top: 20px; padding-bottom: 20px; text-align: right;">
-                        <input type="button" class="material dark raised" value="Login" onclick="submitForm(); return false;" style="margin-right: 10px; margin-top: -10px;" />
+                        <input type="button" class="material dark raised" value="Login" onclick="submitForm('login'); return false;" style="margin-right: 10px; margin-top: -10px;" />
+                    </div>
+                </form>
+                <div class="breaker or"></div>
+                <form action="" method="post" onsubmit="submitForm(); return false;">
+                    <div class="row">
+                        <div class="cell"><input type="text" class="material light" id="signup_username" placeholder="Username" /><div class="error">You done goofed</div></div>
+                        <div class="cell"><input type="email" class="material light" id="signup_email" placeholder="Email" /><div class="error">You done goofed</div></div>
+                    </div>
+                    <div class="row">
+                        <div class="cell"><input type="password" class="material light" id="signup_password" placeholder="Password" /><div class="error">You done goofed</div></div>
+                        <div class="cell"><input type="password" class="material light" id="signup_password_again" placeholder="Password again" /><div class="error">You done goofed</div></div>
+                    </div>
+                    <div class="row" style="margin-top: 20px; padding-bottom: 20px; text-align: right;">
+                        <input type="button" class="material dark raised" value="Sign up" onclick="submitForm('signup'); return false;" style="margin-right: 10px; margin-top: -10px;" />
                     </div>
                 </form>
             </div>

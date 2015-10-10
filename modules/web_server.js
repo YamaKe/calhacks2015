@@ -18,8 +18,8 @@ app.use(
 );
 
 var pages = {
-    reports: {
-        name: 'reports',
+    hackathons: {
+        name: 'hackathons',
         html: null
     },
     // locations: {
@@ -73,7 +73,7 @@ function ensureNotAuthenticated (req, res, next) {
     if (!req.isAuthenticated()) {
         return next();
     }
-    res.redirect('/reports');
+    res.redirect('/hackathons');
 }
 
 module.exports = {
@@ -89,8 +89,8 @@ module.exports = {
         app.get('/', ensureNotAuthenticated, function (req, res) {
             res.send(pages.login.html);
         });
-        app.get('/reports', ensureAuthenticated, function (req, res) {
-            res.send(pages.reports.html);
+        app.get('/hackathons', ensureAuthenticated, function (req, res) {
+            res.send(pages.hackathons.html);
         });
         // app.get('/login', ensureNotAuthenticated, function (req, res) {
         //     res.send(pages.login.html);

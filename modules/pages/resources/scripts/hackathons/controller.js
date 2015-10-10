@@ -6,7 +6,7 @@ var hacks = {
 };
 
 (function () {
-    ngApp.controller('PokiTimeController', ['$scope', '$timeout', '$mdSidenav', '$mdDialog', '$mdUtil', 'PokiTimeModel', 'ReportsModel', function ($scope, $timeout, $mdSidenav, $mdDialog, $mdUtil, PokiTimeModel, ReportsModel) {
+    ngApp.controller('HackathonsController', ['$scope', '$timeout', '$mdSidenav', '$mdDialog', '$mdUtil', 'PokiTimeModel', 'ReportsModel', function ($scope, $timeout, $mdSidenav, $mdDialog, $mdUtil, PokiTimeModel, ReportsModel) {
         this.page = {
             name: 'Poki Time'
         };
