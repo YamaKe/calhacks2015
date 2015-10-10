@@ -156,10 +156,23 @@ module.exports = {
             }
         )
     },
-    editPush: function (hackathon_id, update, callback) {
+    editUser: function (userID, update, callback) {
+        delete update._id;
+        console.log(update);
+        db.users.update({_id: mongojs.ObjectId(userID)}, {$set: update}, function (err, user) {
+            console.log(err);
+            console.log(user);
+            if (err) {
+                callback({error: err});
+            } else {
+                callback({id: user._id});
+            }
+        });
+    },
+    editPush: function (hackathon_id, push_id, update, callback) {
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $set: {pushboard : update } },
+            { _id: mongojs.ObjectId(hackathon_id), pushboard: {_id: mongojs.ObjectId(push_id)} },
+            { $set: {pushboard : {id: mongojs.ObjectId()} } },
             function (err, saved) {
                 if(err) {
                     callback(err);
@@ -169,10 +182,10 @@ module.exports = {
             }
         )
     },
-    removePush: function (hackathon_id, pushmessage, callback) {
+    removePush: function (hackathon_id, push_id, callback) {
         db.hackathons.update(
             { _id: mongojs.ObjectId(hackathon_id) },
-            { $pull: {pushboard : pushmessage } },
+            { $pull: {pushboard : {id: mongojs.ObjectId(push_id)} } },
             function (err, saved) {
                 if(err) {
                     callback(err);
