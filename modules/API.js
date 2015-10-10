@@ -82,13 +82,14 @@ module.exports = {
             });
         });
         app.get(this.prefix + 'hackathon', function (req, res) {
-            database.getHackathons(function (hackathons) {
-                if (!hackathons.error) {
-                    res.send(hackathons);
-                } else {
-                    res.send({message: hackathons.error});
-                }
-            });
+            // database.getHackathons(function (hackathons) {
+            //     if (!hackathons.error) {
+            //         res.send(hackathons);
+            //     } else {
+            //         res.send({message: hackathons.error});
+            //     }
+            // });
+            res.send([{name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg'}, {name: 'HackUCI', image: 'http://hackuci.com/images/Main%20floor.png'}]);
         });
         app.post(this.prefix + 'hackathon', function (req, res) {
             var hackathon = {
