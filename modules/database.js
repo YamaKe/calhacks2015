@@ -85,10 +85,42 @@ module.exports = {
             }
         });
     },
-    addUserToHackathon: function (hackathon_id, user_id, callback) {
+    getHackathons: function (callback) {
+        // TODO: strip sensitive info from the request
+        db.hackathons.find({}, function (err, hackathons) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(hackathons);
+            }
+        });
+    },
+    addAdminsToHackathon: function (hackathon_id, admin_id_array,  callback) {
+        var admin_id_array2 = [];
+        for (var i = 0; i < admin_id_array.length; i++) {
+            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]);
+        }
         db.hackathons.update(
-            { _id: db.ObjectKey(hackathon_id) },
-            { $push: { 'hackers' : db.ObjectKey(user_id) } },
+            { _id: mongojs.ObjectId(hackathon_id) },
+            { $push: { admins : { $each: admin_id_array2 } } },
+            function (err, saved) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        );
+    },
+    // We need to add admin auth for some of the administrative stuff maybe?
+    addUsersToHackathon: function (hackathon_id, user_id_array, callback) {
+        var user_id_array2 = [];
+        for (var i = 0; i < user_id_array.length; i++) {
+            user_id_array2.push(mongojs.ObjectId(user_id_array[i]);
+        }
+        db.hackathons.update(
+            { _id: mongojs.ObjectId(hackathon_id) },
+            { $push: { hackers : { $each: user_id_array2 } } },
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -101,7 +133,7 @@ module.exports = {
     removeUserFromHackathon: function (hackathon_id, user_id, callback) {
         db.hackathons.update(
             { _id: db.ObjectKey(hackathon_id) },
-            { $pull: { 'hackers': { id: db.ObjectKey(user_id) } } },
+            { $pull: { hackers: { id: db.ObjectKey(user_id) } } },
             function (err, saved) {
                 if (err) {
                     callback(err);

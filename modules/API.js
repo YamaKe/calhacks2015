@@ -81,19 +81,30 @@ module.exports = {
                 }
             });
         });
+        app.get(this.prefix + 'hackathon', function (req, res) {
+            database.getHackathons(function (hackathons) {
+                if (!hackathons.error) {
+                    res.send(hackathons);
+                } else {
+                    res.send({message: hackathons.error});
+                }
+            });
+        });
         app.post(this.prefix + 'hackathon', function (req, res) {
             var hackathon = {
                 name:       req.body.name,
                 admins:     req.body.admins,
-                hackers:    req.body.hackers
+                hackers:    req.body.hackers,
+                pushboard:  [],
+                threadboard:[]
             };
             database.addHackathon(hackathon, function (_id) {
                 res.send(_id);
             });
             return;
         });
-        app.post(this.prefix + 'addUsertoHackathon', function (req, res) {
-            var user_id   = req.body.user_id;
+        app.post(this.prefix + 'addUserstoHackathon', function (req, res) {
+            var user_id_array   = req.body.user_id_array;
             var hackathon_id = req.body.hackathon_id;
             database.addUserToHackathon(hackathon_id, user_id, function (hack_id) {
                 res.send(hack_id);
@@ -108,9 +119,16 @@ module.exports = {
             });
             return;
         });
+        app.post(this.prefix + 'addAdminstoHackathon', function (req, res) {
+            var admin_id_array   = req.body.admin_id_array;
+            var hackathon_id = req.body.hackathon_id;
+            database.addUserToHackathon(hackathon_id, admin_id, function (hack_id) {
+                res.send(hack_id);
+            });
+            return;
+        });
         app.post(this.prefix + 'login/local', passport.authenticate('local', {failureRedirect: '/'}),
             function (req, res) {
-                // res.redirect('/');
                 res.send('authenticated');
             }
         );
