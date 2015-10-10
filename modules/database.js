@@ -95,10 +95,19 @@ module.exports = {
             }
         });
     },
+    getHackathonByID: function (hackathonID, callback) {
+        // TODO: strip sensitive info from the request
+        db.users.find({_id: mongojs.ObjectId(userID)}, function (err, user) {
+            if (err) {
+                callback({err: err});
+            }
+            callback(user[0]);
+        });
+    },
     addAdminsToHackathon: function (hackathon_id, admin_id_array,  callback) {
         var admin_id_array2 = [];
         for (var i = 0; i < admin_id_array.length; i++) {
-            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]);
+            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]));
         }
         db.hackathons.update(
             { _id: mongojs.ObjectId(hackathon_id) },
@@ -116,7 +125,7 @@ module.exports = {
     addUsersToHackathon: function (hackathon_id, user_id_array, callback) {
         var user_id_array2 = [];
         for (var i = 0; i < user_id_array.length; i++) {
-            user_id_array2.push(mongojs.ObjectId(user_id_array[i]);
+            user_id_array2.push(mongojs.ObjectId(user_id_array[i]));
         }
         db.hackathons.update(
             { _id: mongojs.ObjectId(hackathon_id) },
@@ -132,7 +141,7 @@ module.exports = {
     },
     removeUserFromHackathon: function (hackathon_id, user_id, callback) {
         db.hackathons.update(
-            { _id: db.ObjectKey(hackathon_id) },
+            { _id: mongojs.ObjectId(hackathon_id) },
             { $pull: { hackers: { id: db.ObjectKey(user_id) } } },
             function (err, saved) {
                 if (err) {
@@ -143,4 +152,14 @@ module.exports = {
             }
         );
     },
+    getPushes: function (hackathon_id, callback) {
+        // TODO: strip sensitive info from the request
+        db.hackathons.find( { _id: mongojs.ObjectId(hackathon_id) } , function (err, hackathons) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(hackathons);
+            }
+        });
+    }
 };

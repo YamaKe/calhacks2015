@@ -128,6 +128,8 @@ module.exports = {
             });
             return;
         });
+
+
         app.post(this.prefix + 'login/local', passport.authenticate('local', {failureRedirect: '/'}),
             function (req, res) {
                 res.send('authenticated');
