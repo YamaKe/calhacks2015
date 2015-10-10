@@ -14,6 +14,12 @@ angular.module('mainp', ['ionic', 'mainp.controllers', 'mainp.services'])
     	templateUrl: 'templates/login.html',
     	controller: 'LoginCtrl'
   	})
+	.state('register', {
+    	url: '/register',
+    	templateUrl: 'templates/register.html',
+    	
+  	})
+
 
   	.state('main', {
     	url: '/main',

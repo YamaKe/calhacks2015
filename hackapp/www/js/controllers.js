@@ -12,5 +12,13 @@ angular.module('mainp.controllers', [])
                 template: 'Please check your credentials!'
             });
         });
-    }
-});
+    };
+})
+
+// .controller('NavCtrl', function($scope, $ionicPopup, $timeout) {
+
+//   $scope.go = function (path) {
+//     $location.path(path);
+//   };
+
+// });
