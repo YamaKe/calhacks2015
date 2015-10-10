@@ -1,0 +1,35 @@
+{
+  "name": "MaterialCSS",
+  "version": "0.0.11",
+  "homepage": "https://github.com/dudeofawesome/MaterialCSS",
+  "authors": [
+    "Louis Orleans <louis@orleans.io>"
+  ],
+  "description": "A set of pure CSS Material Design styles",
+  "main": "./material.scss",
+  "keywords": [
+    "css",
+    "material",
+    "design",
+    "scss"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./modules/pages/resources/scripts/bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "0.0.11",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.11",
+    "commit": "2261bf96f72716da6f96646773b19269bd193880"
+  },
+  "_source": "git://github.com/dudeofawesome/MaterialCSS.git",
+  "_target": "~0.0.11",
+  "_originalSource": "MaterialCSS",
+  "_direct": true
+}

@@ -1,0 +1,50 @@
+<md-dialog aria-label="Mango (Fruit)">
+    <form>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Generate Report</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()" aria-label="Cancel">
+                    <i class='mdi mdi-close'></i>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content style="max-width:800px; max-height:810px; min-width: 600px; min-height: 200px; display: flex; flex-direction: row;">
+            <md-chips ng-model="employees" readonly="true" style="position: absolute; left: 28px; width: 50%;">
+                <md-chip-template ng-if="$chip.selected">
+                    <strong>{{$chip.first_name}} {{$chip.last_name}}</strong>
+                </md-chip-template>
+            </md-chips>
+            <!-- <div style="position: absolute; right: 28px; width: 50%; text-align: right;"> -->
+            <div style="position: absolute; right: 28px; width: 50%; text-align: right;">
+                <div>
+                    <md-input-container style="display:inline-block; width:110px;">
+                        <label>This / Last</label>
+                        <md-select ng-model="ctrl.timePeriodShift">
+                            <md-option ng-repeat="preset in timePeriodShiftPresets" {{$index === 0 ? 'selected' : ''}} value="{{preset.shift}}">
+                                {{preset.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container style="display:inline-block; width:130px;">
+                        <label>Time Period</label>
+                        <md-select ng-model="ctrl.timePeriod">
+                            <md-option ng-repeat="preset in timePeriodPresets" value="{{preset}}">
+                                {{preset.name}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+            </div>
+        </md-dialog-content>
+        <div class="md-actions" layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()" aria-label="Cancel">
+                Cancel
+            </md-button>
+            <md-button ng-click="generate()" aria-label="Generate" style="margin-right:20px;" >
+                Generate
+            </md-button>
+        </div>
+    </form>
+</md-dialog>

@@ -1,0 +1,8 @@
+<div class="chat" chat-list-click ng-repeat="chat in ctrlMessenger.chats | orderBy: 'chat.history[chat.history.length - 1].time'">
+    <div class="icon" style="background-image: url({{chat.image}});"></div>
+    <div class="status" online-status="{{chat.status | lowercase}}"></div>
+    <div class="name">{{chat.name}}</div>
+    <div class="lastMessage">{{chat.history[chat.history.length - 1].message}}</div>
+    <div class="time">{{chat.history[chat.history.length - 1].time | date: 'shortTime'}}</div>
+    <div class="muted" chat-status="{{chat.chatStatus | lowercase}}"><i class='mdi mdi-bell-off'></i></div>
+</div>

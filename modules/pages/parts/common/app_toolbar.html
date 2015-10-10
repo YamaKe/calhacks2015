@@ -1,0 +1,15 @@
+<header id="app_toolbar">
+    <button id="nav_drawer_icon">
+        <div class="icon"><i class='mdi mdi-menu'></i></div>
+    </button>
+    <div id="app_title" title="And some bite, too.">Poki Time</div>
+    <div id="menu_items">
+        <toolbar-menu-item ng-repeat="menuItem in ctrlMessenger.toolbarItems | orderBy:'importance' | limitTo:3"></toolbar-menu-item>
+        <div id="overflow" open-overflow>
+            <div class="icon"><i class='mdi mdi-dots-vertical' title="More"></i></div>
+            <div id="overflow_menu">
+                <toolbar-menu-item ng-repeat="menuItem in ctrlMessenger.toolbarItems | orderBy:'importance' | limitTo:'Infinity':3"></toolbar-menu-item>
+            </div>
+        </div>
+    </div>
+</header>

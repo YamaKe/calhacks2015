@@ -1,0 +1,146 @@
+<md-dialog aria-label="Edit User">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Edit User</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()" arial-label="Cancel">
+                <i class='mdi mdi-close'></i>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content style="max-width:800px; max-height:810px; min-width: 600px; min-height: 200px; display: flex; flex-direction: row;">
+        <form name="addUser" layout-sm="row">
+            <div layout layout-sm="column" style="height: 80px;">
+                <md-input-container flex>
+                    <label>First name</label>
+                    <input required name="first_name" ng-model="employee.first_name">
+                    <div ng-messages="addUser.first_name.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Last name</label>
+                    <input required name="last_name" ng-model="employee.last_name">
+                    <div ng-messages="addUser.last_name.$error">
+                        <div ng-message="required">This is required.</div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div layout layout-sm="column" style="height: 140px;">
+                <div layout layout-sm="row" style="height: 140px; flex-direction:column; margin-right: 50px;">
+                    <div flex layout layout-sm="column" style="height: 70px;">
+                        <md-input-container flex>
+                            <label>Address</label>
+                            <input required name="address" ng-model="employee.address.street">
+                            <div ng-messages="addUser.address.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex layout layout-sm="column" style="height: 70px;">
+                        <md-input-container flex>
+                            <label>City</label>
+                            <input required name="city" ng-model="employee.address.city">
+                            <div ng-messages="addUser.city.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                        <md-autocomplete
+                            md-no-cache="noCache"
+                            md-selected-item="selectedItemState"
+                            md-search-text-change="searchTextStateChange(employee.address.state)"
+                            md-search-text="employee.address.state"
+                            md-selected-item-change="selectedItemStateChange(item)"
+                            md-items="item in states"
+                            md-item-text="item"
+                            md-min-length="0"
+                            placeholder="State"
+                            md-floating-label="State"
+                            style="position: relative; top: -4px;">
+                            <md-item-template>
+                                <span md-highlight-text="employee.address.state" md-highlight-flags="^i">{{item}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No matches found for "{{employee.address.state}}".
+                            </md-not-found>
+                        </md-autocomplete>
+                        <md-input-container flex>
+                            <label>Zip Code</label>
+                            <input required name="zip_code" ng-model="employee.address.zip_code">
+                            <div ng-messages="addUser.zip_code.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout layout-sm="row" style="height: 140px; flex-direction:column;">
+                    <div flex layout layout-sm="column" style="height: 70px;">
+                        <md-input-container flex>
+                            <label>Phone Number</label>
+                            <input required type="tel" name="phone" ng-model="employee.phone">
+                            <div ng-messages="addUser.phone.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex layout layout-sm="column" style="height: 70px;">
+                        <md-input-container flex style="position: relative; top: -4px;">
+                            <label>Hourly pay</label>
+                            <input type="number" name="hourly_rate" required ng-model="employee.hourly_rate">
+                            <div ng-messages="addUser.hourly_rate.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div layout layout-sm="column" style="height: 80px;">
+                <md-autocomplete
+                    md-no-cache="noCache"
+                    md-selected-item="selectedItemLocation"
+                    md-search-text-change="searchTextLocationChange(location)"
+                    md-search-text="location"
+                    md-selected-item-change="selectedItemLocationChange(item)"
+                    md-items="item in positions"
+                    md-item-text="item.title"
+                    md-min-length="0"
+                    placeholder="Position"
+                    md-floating-label="Position">
+                    <md-item-template>
+                        <span md-highlight-text="location" md-highlight-flags="^i">{{item.title}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No matches found for "{{location}}".
+                    </md-not-found>
+                </md-autocomplete>
+                <md-autocomplete
+                    md-no-cache="noCache"
+                    md-selected-item="selectedItemPosition"
+                    md-search-text-change="searchTextPositionChange(position)"
+                    md-search-text="position"
+                    md-selected-item-change="selectedItemPositionChange(item)"
+                    md-items="item in locations"
+                    md-item-text="item.address"
+                    md-min-length="0"
+                    placeholder="Location"
+                    md-floating-label="Location">
+                    <md-item-template>
+                        <span md-highlight-text="position" md-highlight-flags="^i">{{item.address}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No matches found for "{{position}}".
+                    </md-not-found>
+                </md-autocomplete>
+            </div>
+        </form>
+    </md-dialog-content>
+    <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button ng-click="cancel()" aria-label="Cancel">
+            Cancel
+        </md-button>
+        <md-button ng-click="saveuser()" aria-label="Save" style="margin-right:20px;" >
+            Save
+        </md-button>
+    </div>
+</md-dialog>

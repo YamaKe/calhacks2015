@@ -1,0 +1,15 @@
+<div class="icon" style="background-image: url(http://localhost:8080/resources/images/profiles/{{ctrlRightSidebar.user.id}}.jpg);"></div>
+<div class="status" online-status="{{ctrlRightSidebar.user.status | lowercase}}"></div>
+<div class="name">{{ctrlRightSidebar.user.name}}</div>
+<div class="lastActive">Active Now</div>
+<i class="mdi mdi-bell muteIcon"></i>
+<div class="material light switch mute" title="Mute chat">
+    <input id="tglMute" type="checkbox" ng-checked="ctrlRightSidebar.user.chatStatus.toLowerCase()!='muted'" chat-status-setter>
+    <label for="tglMute"></label>
+</div>
+<button class="material light flat call" title="Start call">
+    <i class="mdi mdi-phone"></i>
+</button>
+<div class="profiles">
+    <a ng-repeat="profile in ctrlRightSidebar.user.profiles" href="{{profile.url}}" target="_blank" class="profile"><i class="mdi mdi-{{profile.service}}"></i><span class="no-underline">&nbsp;</span>{{profile.username}}</a>
+</div>

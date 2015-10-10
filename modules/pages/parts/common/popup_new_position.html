@@ -1,0 +1,17 @@
+<div id="actual_popup_new_position" class="material popup">
+    <form>
+        <i class='mdi mdi-account-multiple-plus'></i>
+        <input type="text" class="material light" id="position_name" placeholder="New position" autocomplete="off" ng-model="position.title" />
+        <div class="error"  id="position_name_error">Invalid position name</div>
+        <!-- <div id="start_users_list">
+            <div class="user" ng-repeat="user in ctrlPopupNewChat.users">
+                <div class="icon" style="background-image: url('resources/images/profiles/{{user.id}}.jpg');"></div>
+                <div class="status" online-status="{{user.status | lowercase}}"></div>
+                <div class="name">{{user.name}}</div>
+                <input type="checkbox" class="material light" ng-model="newChat.selected" />
+            </div>
+        </div> -->
+        <button class="material light flat" id="start_cancel" popup-new-chat-close>Cancel</button>
+        <button class="material light flat" id="start_conversation">Add Position</button>
+    </form>
+</div>

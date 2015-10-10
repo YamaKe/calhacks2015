@@ -1,0 +1,15 @@
+<div id="actual_popup_new_chat" class="material popup">
+    <form>
+        <i class='mdi mdi-search'></i><input type="text" class="material light" id="start_username" placeholder="New conversation" autocomplete="off" ng-model="search.name" />
+        <div id="start_users_list">
+            <div class="user" ng-repeat="user in ctrlPopupNewChat.users">
+                <div class="icon" style="background-image: url('resources/images/profiles/{{user.id}}.jpg');"></div>
+                <div class="status" online-status="{{user.status | lowercase}}"></div>
+                <div class="name">{{user.name}}</div>
+                <input type="checkbox" class="material light" ng-model="newChat.selected" />
+            </div>
+        </div>
+        <button class="material light flat" id="start_cancel" popup-new-chat-close>Cancel</button>
+        <button class="material light flat" id="start_conversation">Generate Report</button>
+    </form>
+</div>

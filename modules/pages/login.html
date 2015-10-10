@@ -1,0 +1,25 @@
+<html>
+    {{header}}
+    <body>
+        <header></header>
+        <div id="main">
+            <div id="inside">
+                <div class="header">
+                    <img src="resources/images/icon.png" class="logo" />
+                    <div>
+                        Poki-Time
+                    </div>
+                </div>
+                <form action="" method="post" onsubmit="submitForm(); return false;">
+                    <div class="row">
+                        <div class="cell"><input type="text" class="material light" id="login_username" placeholder="Username" onkeydown="listenForReturnKey(event);" autofocus /><div class="error">You done goofed</div></div>
+                        <div class="cell"><input type="password" class="material light" id="login_password" placeholder="Password" onkeydown="listenForReturnKey(event);" /><div class="error">You done goofed</div></div>
+                    </div>
+                    <div class="row" style="margin-top: 20px; padding-bottom: 20px; text-align: right;">
+                        <input type="button" class="material dark raised" value="Login" onclick="submitForm(); return false;" style="margin-right: 10px; margin-top: -10px;" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

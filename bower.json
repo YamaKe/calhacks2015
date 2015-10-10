@@ -1,0 +1,36 @@
+{
+  "name": "poki-monster-website",
+  "version": "0.0.0",
+  "authors": [
+    "Louis Orleans <louis@orleans.io>"
+  ],
+  "description": "poki-monster-website",
+  "main": "./common/controller.js",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "LicenseRef-LICENSE",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.7",
+    "angular-material": "~0.11.1",
+    "angular-messages": "~1.4.7",
+    "angular-resource": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "file-saver.js": "~1.20150507.2",
+    "js-xlsx": "~0.8.0",
+    "MaterialCSS": "~0.0.11",
+    "mdi": "~1.2.65",
+    "jszip": "Stuk/jszip#~2.5.0"
+  },
+  "resolutions": {
+    "angular": "~1.4.7"
+  }
+}

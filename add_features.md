@@ -1,0 +1,37 @@
+- [ ] Graph
+    - [x] hour split
+    - [ ] who is working today
+- [ ] Display and edit employee info
+    - [ ] SSN
+    - [ ] address
+    - [ ] phone number
+    - [ ] misc. info field
+- [ ] Reports
+    - [ ] standard
+        - [x] Show employee's hourly pay
+        - [x] Show employee's total hours
+        - [ ] Consider showing only a week breakdown instead of daily breakdown
+        - [ ] try to change dates to shorter format
+        - [ ] sort by location
+    - [ ] add types
+        - [ ] Employee summary
+            - [ ] name
+            - [ ] department
+            - [ ] hourly rate
+        - [ ] Attendance
+            - [ ] name
+            - [ ] department
+            - [ ] days in
+            - [ ] checkins
+    - [ ] Anything else?
+- [ ] Employee should be able to type in phone number to log in
+- [x] Reset password
+    - [x] user: admin   password: 1969
+    - [x] user: manager password: 9292
+- [ ] Figure out a better way to do credentials. Passwords are not strong enough.
+- [ ] be able to change password
+- [ ] add last month, 2 week, 1 week, quarter, half year, year presets to the generate report dialog
+- [x] add select all users button
+- [ ] publish app on store
+
+- [ ] Employee scheduling feature

@@ -1,0 +1,4 @@
+<div class="message" ng-repeat="message in ctrlChatHistory.history" sender resize-height>
+    <div class="icon" title="{{ctrlMessenger.chats[message.sender].name}}" style="background-image: url('resources/images/profiles/{{message.sender}}.jpg');"></div>
+    <div class="text" title="{{message.time | date: 'shortTime'}}"><div ng-if="message.attachment" class="attachment"><img title="{{message.time | date: 'shortTime'}}" src="{{message.attachment}}" /></div>{{message.message}}</div>
+</div>
