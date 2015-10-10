@@ -143,4 +143,15 @@ module.exports = {
             }
         );
     },
+
+    addPush: function (hackathon_id, pushmessage, callback) {
+        db.pushboard.save(pushmessage, function (err, saved) {
+                if(err){
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        )
+    }
 };
