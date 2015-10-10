@@ -143,9 +143,11 @@ module.exports = {
             }
         );
     },
-
     addPush: function (hackathon_id, pushmessage, callback) {
-        db.pushboard.save(pushmessage, function (err, saved) {
+        db.hackathons.update(
+            { _id: mongojs.ObjectId(hackathon_id) },
+            { $push: { pushboard : pushmessage } },
+            function (err, saved) {
                 if(err){
                     callback(err);
                 } else {
@@ -153,5 +155,31 @@ module.exports = {
                 }
             }
         )
-    }
+    },
+    editPush: function (hackathon_id, update, callback) {
+        db.hackathons.update(
+            { _id: mongojs.ObjectId(hackathon_id) },
+            { $set: {pushboard : update } },
+            function (err, saved) {
+                if(err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        )
+    },
+    removePush: function (hackathon_id, pushmessage, callback) {
+        db.hackathons.update(
+            { _id: mongojs.ObjectId(hackathon_id) },
+            { $pull: {pushboard : pushmessage } },
+            function (err, saved) {
+                if(err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        )
+    },
 };
