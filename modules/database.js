@@ -183,7 +183,6 @@ module.exports = {
         )
     },
     //Adds the user's id to the upvote array
-    //To-do: This should search the downvote array and remove them if found
     upvote: function (hackathon_id, post_id, user_id, callback) {
         // query upvote array and downvote array for user_id
         var upFound = db.hackathons.find({upvotes: user_id}, function (err, hackathons) {
@@ -234,18 +233,53 @@ module.exports = {
         });
     }
     //Adds the user's id to the downvote array
-    //To-do: This should search the upvote array and remove them if found
     downvote: function (hackathon_id, post_id, user_id, callback) {
-        db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id), post_id},
-            { $push: {downvotes : {id: mongojs.ObjectId(user_id)} } },
-            function (err, saved) {
-                if(err) {
-                    callback(err);
-                } else {
-                    callback(saved._id);
-                }
+        // query upvote array and downvote array for user_id
+        var upFound = db.hackathons.find({upvotes: user_id}, function (err, hackathons) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(users);
             }
-        )
+        },
+        var downFound = db.hackathons.find({downvotes: user_id}, function (err, hackathons) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(users);
+            }
+        },
+        // if both returned lists are empty, then put in a new upvote
+        if (upFound.length === 0 && downFound.length === 0) {
+            db.hackathons.update(
+                { _id: mongojs.ObjectId(hackathon_id), post_id},
+                { $push: {downvotes : {id: mongojs.ObjectId(user_id)} } },
+                function (err, saved) {
+                    if(err) {
+                        callback(err);
+                    } else {
+                        callback(saved._id);
+                    }
+                }
+            )
+        }
+        // if the downvote isnt empty, then remove the user_id from downvote and add it to upvote
+        else if (upFound.length != 0) {
+            db.hackathons.update(
+                { _id: mongojs.ObjectId(hackathon_id), post_id},
+                { $pull: {upvotes: {id: mongojs.ObjectId(user_id)} } },
+                { $push: {downvotes : {id: mongojs.ObjectId(user_id)} } },
+                function (err, saved) {
+                    if(err) {
+                        callback(err);
+                    } else {
+                        callback(saved._id);
+                    }
+                }
+            )
+        }
+        // if the upvote isnt empty, then don't do anything
+        else { }
+        });
     }
 };
