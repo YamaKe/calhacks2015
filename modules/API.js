@@ -136,6 +136,14 @@ module.exports = {
             });
             return;
         });
+        app.put(this.prefix + 'removeAdminfromHackathon', function (req, res) {
+            var admin_id   = req.body.admin_id;
+            var hackathon_id = req.body.hackathon_id;
+            database.removeAdminToHackathon(hackathon_id, admin_id, function (hack_id) {
+                res.send(hack_id);
+            });
+            return;
+        });
         app.get(this.prefix + 'createObjectID', function (req, res) {
             database.createObjectID(function (newObjectId) {
                     res.send(newObjectId);

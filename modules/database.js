@@ -121,14 +121,27 @@ module.exports = {
             callback(user[0]);
         });
     },
-    addAdminsToHackathon: function (hackathonID, admin_id_array,  callback) {
-        var admin_id_array2 = [];
-        for (var i = 0; i < admin_id_array.length; i++) {
-            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]));
+    addAdminsToHackathon: function (hackathonID, adminIDArray,  callback) {
+        var adminIDArray2 = [];
+        for (var i = 0; i < adminIDArray.length; i++) {
+            adminIDArray2.push(mongojs.ObjectId(adminIDArray[i]));
         }
         db.hackathons.update(
             {_id: mongojs.ObjectId(hackathonID)},
-            {$push: {admins: {$each: admin_id_array2}}},
+            {$push: {admins: {$each: adminIDArray2}}},
+            function (err, saved) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        );
+    },
+    removeAdminFromHackathon: function (hackathonID, adminID, callback) {
+        db.hackathons.update(
+            {_id: mongojs.ObjectId(hackathonID)},
+            {$pull: {admins: {id: mongojs.ObjectId(adminID)}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -139,14 +152,14 @@ module.exports = {
         );
     },
     // We need to add admin auth for some of the administrative stuff maybe?
-    addUsersToHackathon: function (hackathonID, user_id_array, callback) {
-        var user_id_array2 = [];
-        for (var i = 0; i < user_id_array.length; i++) {
-            user_id_array2.push(mongojs.ObjectId(user_id_array[i]));
+    addUsersToHackathon: function (hackathonID, userIDArray, callback) {
+        var userIDArray2 = [];
+        for (var i = 0; i < userIDArray.length; i++) {
+            userIDArray2.push(mongojs.ObjectId(userIDArray[i]));
         }
         db.hackathons.update(
             {_id: mongojs.ObjectId(hackathonID)},
-            {$push: {hackers: {$each: user_id_array2}}},
+            {$push: {hackers: {$each: userIDArray2}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -156,10 +169,10 @@ module.exports = {
             }
         );
     },
-    removeUserFromHackathon: function (hackathonID, user_id, callback) {
+    removeUserFromHackathon: function (hackathonID, userID, callback) {
         db.hackathons.update(
             {_id: mongojs.ObjectId(hackathonID)},
-            {$pull: {hackers: {id: mongojs.ObjectId(user_id)}}},
+            {$pull: {hackers: {id: mongojs.ObjectId(userID)}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -206,6 +219,19 @@ module.exports = {
     addParentComment: function (comment, callback) {
         db.hackathons.update(
             {_id: mongojs.ObjectId(hackathonID)},
+            {$push: {threadboard: comment}},
+            function (err, saved) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        );
+    },
+    addReplyComment: function (comment, parentID, callback) {
+        db.hackathons.update(
+            {_id: ObjectId('53dea71a713d636e1fea705a'),},
             {$push: {threadboard: comment}},
             function (err, saved) {
                 if (err) {
