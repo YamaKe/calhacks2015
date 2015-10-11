@@ -1,6 +1,7 @@
 var Utils = require('./utils');
 var chalk = require('chalk');
 var mongojs = require('mongojs');
+// var validator = require('validator');
 
 var db;
 var collections = ['users', 'hackathons'];
@@ -51,16 +52,32 @@ module.exports = {
         });
     },
     addUser: function (user, callback) {
-        // verify there are no other users with username and that the email is valid
-        // db.users.find({username: user.username}, function (err, users) {\
-        db.users.save(user, function (err, saved) {
+        //Searches for a user with that username
+        var userFound = db.users.find({username: user.username}, function (err, user) {
             if (err) {
-                callback(err);
-            } else {
-                // TODO: use nodemailer in the wherever the callback goes to send an email with user info (QR code)
-                callback(saved._id);
+                callback({err: err});
             }
         });
+        //Checks if the email is valid
+        var validEmail = validator.isEmail(user.email);
+        //Searches for a user with that email
+        var emailFound = db.users.find({email: user.email}, function (err, user) {
+            if (err) {
+                callback({err: err});
+            }
+        });
+        if (userFound.length === 0
+            && validEmail
+            && !emailFound) {
+                db.users.save(user, function (err, saved) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        // TODO: use nodemailer in the wherever the callback goes to send an email with user info (QR code)
+                        callback(saved._id);
+                    }
+                });
+            }
     },
     editUser: function (userID, update, callback) {
         delete update._id;
