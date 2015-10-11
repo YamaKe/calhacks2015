@@ -119,7 +119,9 @@ var hacks = {
                 priviliged: false
             }
         };
-        $scope.discussions = HackathonsModel.DiscussionsResource.query({hackathon_id: hackathon._id, limit: 25});
+        HackathonsModel.getDiscussions({hackathon_id: hackathon._id, limit: 25}, function (threads) {
+            $scope.discussions = threads;
+        });
 
         $scope.hide = function () {
             $mdDialog.hide();

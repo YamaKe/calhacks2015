@@ -103,6 +103,15 @@ module.exports = {
             });
             return;
         });
+        app.get(this.prefix + 'discussion', function (req, res) {
+            database.getThreads(req.query.hackathon_id, req.query.parent, req.query.retrieved, req.query.limit, function (hackathons) {
+                if (!hackathons.error) {
+                    res.send(hackathons);
+                } else {
+                    res.send({message: hackathons.error});
+                }
+            });
+        });
         app.post(this.prefix + 'addUserstoHackathon', function (req, res) {
             var user_id_array   = req.body.user_id_array;
             var hackathon_id = req.body.hackathon_id;

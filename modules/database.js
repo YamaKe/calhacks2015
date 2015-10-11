@@ -170,12 +170,36 @@ module.exports = {
         );
     },
     getPushes: function (hackathonID, callback) {
-        // TODO: strip sensitive info from the request
-        db.hackathons.find({_id: mongojs.ObjectId(hackathonID)}, {pushboard: 1}, function (err, hackathons) {
+        db.hackathons.find({_id: mongojs.ObjectId(hackathonID)}, function (err, pins) {
             if (err) {
-                callback(err);
+                callback({error: err});
             } else {
-                callback(hackathons);
+                callback(pins);
+            }
+        });
+    },
+    getThreads: function (hackathonID, parent_comment, alreadyRetrieved, limit, callback) {
+        console.log(hackathonID);
+        // TODO: change query if parent_comment is defined
+        var query = {_id: mongojs.ObjectId(hackathonID)};
+        db.hackathons.find(query, {threadboard: 1}, function (err, discussions) {
+            if (err) {
+                callback({error: err});
+            } else {
+                // Remove  already retrieved comments from return
+                if (alreadyRetrieved) {
+                    for (var i = 0; i < alreadyRetrieved.length; i++) {
+                        for (var j = 0; j < discussions.length; j++) {
+                            if (alreadyRetrieved[i] === discussions[j]._id) {
+                                discussions.splice(j, 1);
+                            }
+                        }
+                    }
+                }
+                if (limit) {
+                    discussions = discussions.slice(0, (limit < discussions.length ? limit : discussions.length));
+                }
+                callback(discussions);
             }
         });
     },

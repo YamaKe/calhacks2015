@@ -41,6 +41,11 @@ String.prototype.replaceAll = function (find, replace) {
                 factory.locationsDict[locations[i]._id] = locations[i];
             }
         });
+        factory.getDiscussions = function (query, callback) {
+            DiscussionsResource.query(query, function (threads) {
+                callback(threads);
+            });
+        };
         factory.addUser = function (user, callback) {
             var userPost = {
                 first_name: user.first_name,
