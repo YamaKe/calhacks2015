@@ -98,11 +98,11 @@ module.exports = {
     addAdminsToHackathon: function (hackathon_id, admin_id_array,  callback) {
         var admin_id_array2 = [];
         for (var i = 0; i < admin_id_array.length; i++) {
-            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]);
+            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]));
         }
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $push: { admins : { $each: admin_id_array2 } } },
+            {_id:mongojs.ObjectId(hackathon_id)},
+            {$push:{admins:{$each:admin_id_array2}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -116,11 +116,11 @@ module.exports = {
     addUsersToHackathon: function (hackathon_id, user_id_array, callback) {
         var user_id_array2 = [];
         for (var i = 0; i < user_id_array.length; i++) {
-            user_id_array2.push(mongojs.ObjectId(user_id_array[i]);
+            user_id_array2.push(mongojs.ObjectId(user_id_array[i]));
         }
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $push: { hackers : { $each: user_id_array2 } } },
+            {_id:mongojs.ObjectId(hackathon_id)},
+            {$push:{hackers:{$each:user_id_array2}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -132,8 +132,8 @@ module.exports = {
     },
     removeUserFromHackathon: function (hackathon_id, user_id, callback) {
         db.hackathons.update(
-            { _id: db.ObjectKey(hackathon_id) },
-            { $pull: { hackers: { id: db.ObjectKey(user_id) } } },
+            {_id:db.ObjectKey(hackathon_id)},
+            {$pull:{hackers:{id:db.ObjectKey(user_id)}}},
             function (err, saved) {
                 if (err) {
                     callback(err);
@@ -145,45 +145,45 @@ module.exports = {
     },
     addPush: function (hackathon_id, pushmessage, callback) {
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $push: { pushboard : pushmessage } },
+            {_id:mongojs.ObjectId(hackathon_id)},
+            {$push:{pushboard:pushmessage}},
             function (err, saved) {
-                if(err){
+                if (err){
                     callback(err);
                 } else {
                     callback(saved._id);
                 }
             }
-        )
+        );
     },
     editPush: function (hackathon_id, push_id, update, callback) {
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id), pushboard: {_id: mongojs.ObjectId(push_id)} },
-            { $set: {pushboard : {id: mongojs.ObjectId()} } },
+            {_id:mongojs.ObjectId(hackathon_id), pushboard: {_id: mongojs.ObjectId(push_id)}},
+            {$set:{pushboard:{id:mongojs.ObjectId()}}},
             function (err, saved) {
-                if(err) {
+                if (err) {
                     callback(err);
                 } else {
                     callback(saved._id);
                 }
             }
-        )
+        );
     },
     removePush: function (hackathon_id, push_id, callback) {
         db.hackathons.update(
-            { _id: mongojs.ObjectId(hackathon_id) },
-            { $pull: {pushboard : {id: mongojs.ObjectId(push_id)} } },
+            {_id: mongojs.ObjectId(hackathon_id)},
+            {$pull:{pushboard:{id:mongojs.ObjectId(push_id)}}},
             function (err, saved) {
-                if(err) {
+                if (err) {
                     callback(err);
                 } else {
                     callback(saved._id);
                 }
             }
-        )
+        );
     },
     //Adds the user's id to the upvote array
-    upvote: function (hackathon_id, post_id, user_id, callback) {
+    upVote: function (hackathon_id, post_id, user_id, callback) {
         // query upvote array and downvote array for user_id
         var upFound = db.hackathons.find({upvotes: user_id}, function (err, hackathons) {
             if (err) {
@@ -191,49 +191,47 @@ module.exports = {
             } else {
                 callback(users);
             }
-        },
+        });
         var downFound = db.hackathons.find({downvotes: user_id}, function (err, hackathons) {
             if (err) {
                 callback(err);
             } else {
                 callback(users);
             }
-        },
+        });
         // if both returned lists are empty, then put in a new upvote
         if (upFound.length === 0 && downFound.length === 0) {
             db.hackathons.update(
-                { _id: mongojs.ObjectId(hackathon_id), post_id},
-                { $push: {upvotes : {id: mongojs.ObjectId(user_id)} } },
+                {_id:mongojs.ObjectId(hackathon_id),upvotes:post_id},
+                {$push:{upvotes:{id:mongojs.ObjectId(user_id)}}},
                 function (err, saved) {
-                    if(err) {
+                    if (err) {
                         callback(err);
                     } else {
                         callback(saved._id);
                     }
                 }
-            )
+            );
         }
         // if the downvote isnt empty, then remove the user_id from downvote and add it to upvote
         else if (downFound.length != 0) {
             db.hackathons.update(
-                { _id: mongojs.ObjectId(hackathon_id), post_id},
-                { $pull: {downvotes: {id: mongojs.ObjectId(user_id)} } },
-                { $push: {upvotes : {id: mongojs.ObjectId(user_id)} } },
+                {_id:mongojs.ObjectId(hackathon_id),upvotes:post_id},
+                {$pull:{downvotes:{id:mongojs.ObjectId(user_id)}}},
+                {$push:{upvotes:{id:mongojs.ObjectId(user_id)}}},
                 function (err, saved) {
-                    if(err) {
+                    if (err) {
                         callback(err);
                     } else {
                         callback(saved._id);
                     }
                 }
-            )
+            );
         }
         // if the upvote isnt empty, then don't do anything
-        else { }
-        });
-    }
-    //Adds the user's id to the downvote array
-    downvote: function (hackathon_id, post_id, user_id, callback) {
+    },
+    // Adds the user's id to the downvote array
+    downVote: function (hackathon_id, post_id, user_id, callback) {
         // query upvote array and downvote array for user_id
         var upFound = db.hackathons.find({upvotes: user_id}, function (err, hackathons) {
             if (err) {
@@ -241,45 +239,43 @@ module.exports = {
             } else {
                 callback(users);
             }
-        },
+        });
         var downFound = db.hackathons.find({downvotes: user_id}, function (err, hackathons) {
             if (err) {
                 callback(err);
             } else {
                 callback(users);
             }
-        },
+        });
         // if both returned lists are empty, then put in a new upvote
         if (upFound.length === 0 && downFound.length === 0) {
             db.hackathons.update(
-                { _id: mongojs.ObjectId(hackathon_id), post_id},
-                { $push: {downvotes : {id: mongojs.ObjectId(user_id)} } },
+                {_id:mongojs.ObjectId(hackathon_id), downvotes:post_id},
+                {$push:{downvotes:{id:mongojs.ObjectId(user_id)}}},
                 function (err, saved) {
-                    if(err) {
+                    if (err) {
                         callback(err);
                     } else {
                         callback(saved._id);
                     }
                 }
-            )
+            );
         }
-        // if the downvote isnt empty, then remove the user_id from downvote and add it to upvote
+        // if the upvote isnt empty, then remove the user_id from downvote and add it to upvote
         else if (upFound.length != 0) {
             db.hackathons.update(
-                { _id: mongojs.ObjectId(hackathon_id), post_id},
-                { $pull: {upvotes: {id: mongojs.ObjectId(user_id)} } },
-                { $push: {downvotes : {id: mongojs.ObjectId(user_id)} } },
+                {_id:mongojs.ObjectId(hackathon_id),downvotes:post_id},
+                {$pull:{upvotes:{id:mongojs.ObjectId(user_id)}}},
+                {$push:{downvotes:{id:mongojs.ObjectId(user_id)}}},
                 function (err, saved) {
-                    if(err) {
+                    if (err) {
                         callback(err);
                     } else {
                         callback(saved._id);
                     }
                 }
-            )
+            );
         }
         // if the upvote isnt empty, then don't do anything
-        else { }
-        });
     }
 };
