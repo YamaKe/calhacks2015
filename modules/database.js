@@ -87,18 +87,35 @@ module.exports = {
     },
     getHackathons: function (callback) {
         // TODO: strip sensitive info from the request
-        db.hackathons.find({}, function (err, hackathons) {
-            if (err) {
-                callback(err);
-            } else {
-                callback(hackathons);
-            }
-        });
+        // db.hackathons.find({}, function (err, hackathons) {
+        //     if (err) {
+        //         callback(err);
+        //     } else {
+        //         callback(hackathons);
+        //     }
+        // });
+        callback([
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'HackUCI', image: 'http://hackuci.com/images/Main%20floor.png', time: 1448067600, location: 'UC Irvine', color: 'rgb(44, 91, 151)'},
+            {name: 'Hack Western 2', image: 'https://hackwestern.com/img/hw/splash.png', time: 1448640000, location: 'Western University', color: 'rgb(71, 54, 129)'},
+            {name: 'Hack(RPI);', image: 'http://www.hackrpi.com/2014/assets/empac_mini.jpg', time: 1447509600, location: 'Rensselaer Polytechnic Institute Troy, NY', color: 'rgb(179, 71, 53)'},
+            {name: 'HackUCI', image: 'http://hackuci.com/images/Main%20floor.png', time: 1448067600, location: 'UC Irvine', color: 'rgb(44, 91, 151)'},
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'HackUCI', image: 'http://hackuci.com/images/Main%20floor.png', time: 1448067600, location: 'UC Irvine', color: 'rgb(44, 91, 151)'},
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'HackUCI', image: 'http://hackuci.com/images/Main%20floor.png', time: 1448067600, location: 'UC Irvine', color: 'rgb(44, 91, 151)'},
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'Cal Hacks 2.0', image: 'http://www.calhacks.io/assets/img/hackathon_background.jpg', time: 1444442400, location: 'UC Berkely', color: 'rgb(238, 168, 60)'},
+            {name: 'HackUCI', image: 'http://hackuci.com/images/Main%20floor.png', time: 1448067600, location: 'UC Irvine', color: 'rgb(44, 91, 151)'}
+        ]);
     },
     addAdminsToHackathon: function (hackathon_id, admin_id_array,  callback) {
         var admin_id_array2 = [];
         for (var i = 0; i < admin_id_array.length; i++) {
-            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]);
+            admin_id_array2.push(mongojs.ObjectId(admin_id_array[i]));
         }
         db.hackathons.update(
             { _id: mongojs.ObjectId(hackathon_id) },
@@ -116,7 +133,7 @@ module.exports = {
     addUsersToHackathon: function (hackathon_id, user_id_array, callback) {
         var user_id_array2 = [];
         for (var i = 0; i < user_id_array.length; i++) {
-            user_id_array2.push(mongojs.ObjectId(user_id_array[i]);
+            user_id_array2.push(mongojs.ObjectId(user_id_array[i]));
         }
         db.hackathons.update(
             { _id: mongojs.ObjectId(hackathon_id) },

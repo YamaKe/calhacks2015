@@ -1,0 +1,83 @@
+<md-dialog class="hackathon" aria-label="{{hackathon.name}}">
+    <style>
+        md-dialog md-toolbar:not(.md-menu-toolbar) {
+            background-color: {{hackathon.color}};
+        }
+        md-tabs .md-tab.md-active {
+            color: rgb(220, 220, 220);
+        }
+        md-tabs .md-tab {
+            color: rgb(250, 250, 250);
+        }
+        md-tabs {
+            /*color: rgb(250, 250, 250);*/
+            background-color: {{hackathon.color}}
+        }
+        md-tabs-label {
+            color: rgb(250, 250, 250);
+        }
+        md-tab-item {
+            color: rgb(250, 250, 250);
+            width: auto;
+            max-width: none;
+        }
+        md-tab-item .mdi {
+            margin-left: -12px;
+        }
+        md-tab-content {
+            /*color: rgb(250, 250, 250);*/
+            background-color: rgb(250, 250, 250);
+            padding: 20px;
+        }
+    </style>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" ng-click="cancel()" arial-label="Cancel">
+                <i class='mdi mdi-close'></i>
+            </md-button>
+            <h2>{{hackathon.name}} – {{user.role.name}}</h2>
+            <span flex></span>
+        </div>
+    </md-toolbar>
+    <md-dialog-content style="display: flex; flex-direction: row; padding: 0px; width: 100%; height: 100%;">
+        <md-tabs style="width:100%;" md-center-tabs="true">
+            <md-tab id="tab1">
+                <md-tab-label><i class='mdi mdi-information'></i></md-tab-label>
+                <md-tab-body>
+                    View for Item #1 <br/>
+                    data.selectedIndex = 0;
+                </md-tab-body>
+            </md-tab>
+            <md-tab id="tab2">
+                <md-tab-label><i class='mdi mdi-message-text'></i></md-tab-label>
+                <md-tab-body>
+                    View for Item #2 <br/>
+                    data.selectedIndex = 1;
+                </md-tab-body>
+            </md-tab>
+            <md-tab id="tab3">
+                <md-tab-label><i class='mdi mdi-map-marker'></i></md-tab-label>
+                <md-tab-body>
+                    View for Item #3 <br/>
+                    data.selectedIndex = 2;
+                </md-tab-body>
+            </md-tab>
+            <md-tab id="tab4" ng-if="admin">
+                <md-tab-label><i class='mdi mdi-map-marker'></i></md-tab-label>
+                <md-tab-body>
+                    View for Item #3 <br/>
+                    data.selectedIndex = 2;
+                </md-tab-body>
+            </md-tab>
+        </md-tabs>
+    </md-dialog-content>
+    <!-- <div class="md-actions" layout="row">
+        <span flex></span>
+        <md-button ng-click="cancel()" aria-label="Cancel">
+            Cancel
+        </md-button>
+        <md-button ng-click="saveuser()" aria-label="Save" style="margin-right:20px;" >
+            Save
+        </md-button>
+    </div> -->
+</md-dialog>

@@ -6,14 +6,11 @@ var hacks = {
 };
 
 (function () {
-    ngApp.controller('HackathonsController', ['$scope', '$timeout', '$mdSidenav', '$mdDialog', '$mdUtil', 'PokiTimeModel', 'ReportsModel', function ($scope, $timeout, $mdSidenav, $mdDialog, $mdUtil, PokiTimeModel, ReportsModel) {
+    ngApp.controller('HackathonsController', ['$scope', '$timeout', '$mdSidenav', '$mdDialog', '$mdUtil', 'HackathonsModel', function ($scope, $timeout, $mdSidenav, $mdDialog, $mdUtil, HackathonsModel) {
         this.page = {
-            name: 'Poki Time'
+            name: './hack'
         };
         this.toolbarItems = [
-            {icon: 'file-excel', title: 'Generate Report', importance: 0, onclick: function () {
-                ReportsModel.exportXLS();
-            }},
             {icon: 'account-plus', title: 'Add Employee', importance: 1, onclick: function ($event) {
                 $scope.showAddUserDialog($event);
             }},
@@ -27,9 +24,9 @@ var hacks = {
                 window.location.href = '/api/logout';
             }}
         ];
-        this.positions = PokiTimeModel.positions;
-        this.employees = PokiTimeModel.employees;
-        this.generatedReport = ReportsModel.generatedReport;
+        this.hackathons = HackathonsModel.hackathons;
+        this.positions = HackathonsModel.positions;
+        this.employees = HackathonsModel.employees;
 
         $scope.toggleNavDrawer = $mdUtil.debounce(function () {
             $mdSidenav('left').toggle();
@@ -38,23 +35,9 @@ var hacks = {
         var allSelected = false;
         this.selectAll = function () {
             allSelected = !allSelected;
-            for (var i in PokiTimeModel.employees) {
-                PokiTimeModel.employees[i].selected = allSelected;
+            for (var i in HackathonsModel.employees) {
+                HackathonsModel.employees[i].selected = allSelected;
             }
-        };
-
-        $scope.showGenerateReportDialog = function (ev) {
-            $mdDialog.show({
-                controller: GenerateReportDialogController,
-                templateUrl: '/parts/reports/generate_report_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true
-            }).then(function (answer) {
-                $scope.status = 'You said the information was "' + answer + '".';
-            }, function () {
-                $scope.status = 'You cancelled the dialog.';
-            });
         };
 
         $scope.showAddUserDialog = function (ev) {
@@ -86,13 +69,13 @@ var hacks = {
         };
 
         this.viewEmployee = function (ev, employee) {
-            employee = PokiTimeModel.employeesDict[employee];
+            employee = HackathonsModel.employeesDict[employee];
             $mdDialog.show({
                 controller: EditEmployeeDialogController,
                 locals: {
                     employee: employee,
-                    location: PokiTimeModel.positionsDict[employee.position].title,
-                    position: PokiTimeModel.locationsDict[employee.location].address
+                    location: HackathonsModel.positionsDict[employee.position].title,
+                    position: HackathonsModel.locationsDict[employee.location].address
                 },
                 templateUrl: '/parts/reports/edit_user_dialog.html',
                 parent: angular.element(document.body),
@@ -113,49 +96,30 @@ var hacks = {
             };
         };
 
+        $scope.expandHackathon = function ($event, hackathon) {
+            $mdDialog.show({
+                controller: HackathonDialogController,
+                locals: {
+                    hackathon: hackathon
+                },
+                templateUrl: '/parts/reports/hackathon_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: $event,
+                clickOutsideToClose: false
+            });
+        };
+
         hacks.getAngularScopeOutside();
     }]);
-    function GenerateReportDialogController ($scope, $mdDialog, PokiTimeModel, ReportsModel) {
-        $scope.employees = PokiTimeModel.employees;
-        $scope.date_from = ReportsModel.date_from;
-        $scope.date_to = ReportsModel.date_to;
-
-        $scope.timePeriodShiftPresets = [{name:'This', shift:0},{name:'Last', shift:-1}];
-        var thisMonth = new Date();
-        thisMonth.setDate(1);
-        thisMonth.setHours(0, 0, 0, 0);
-        var this2weeks = new Date();
-        this2weeks.setDate(-this2weeks.getDay() - 7);
-        this2weeks.setHours(0, 0, 0, 0);
-        var thisWeek = new Date();
-        thisWeek.setDate(-thisWeek.getDay());
-        thisWeek.setHours(0, 0, 0, 0);
-        var thisQuarter = new Date();
-        thisQuarter.setDate(1);
-        thisQuarter.setHours(0, 0, 0, 0);
-        var thisHalfYear = new Date();
-        if (thisHalfYear.getMonth() > 6) {
-            thisHalfYear.setMonth(6);
-        } else {
-            thisHalfYear.setMonth(0);
-        }
-        thisHalfYear.setDate(1);
-        thisHalfYear.setHours(0, 0, 0, 0);
-        var thisYear = new Date();
-        thisYear.setDate(1);
-        thisYear.setMonth(0);
-        thisYear.setHours(0, 0, 0, 0);
-        $scope.timePeriodPresets = [
-            {name: 'month', start: thisMonth, stop: new Date()},
-            {name: '2 weeks', start: thisMonth, stop: new Date()},
-            {name: 'week', start: thisMonth, stop: new Date()},
-            {name: 'quarter', start: thisMonth, stop: new Date()},
-            {name: 'half year', start: thisMonth, stop: new Date()},
-            {name: 'year', start: thisMonth, stop: new Date()},
-        ];
-
-        $scope.timePeriodShift = $scope.timePeriodPresets[0];
-        $scope.timePeriod = $scope.timePeriodPresets[0];
+    function HackathonDialogController ($scope, $mdDialog, HackathonsModel, hackathon) {
+        $scope.hackathon = hackathon;
+        $scope.user = {
+            role: {
+                name: 'Attendee',
+                priviliged: false
+            }
+        };
+        $scope.discussions = HackathonsModel.DiscussionsResource.query({hackathon_id: hackathon._id, limit: 25});
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -165,19 +129,12 @@ var hacks = {
             $mdDialog.cancel();
         };
 
-        $scope.generate = function () {
-            var employeesInReport = [];
-            for (var i in $scope.employees) {
-                if ($scope.employees[i].selected && $scope.employees[i]._id !== undefined) {
-                    employeesInReport.push($scope.employees[i]._id);
-                }
-            }
-            ReportsModel.generateReport(employeesInReport, $scope.date_from, $scope.date_to);
+        $scope.save = function () {
             $mdDialog.hide();
         };
     }
-    function AddPositionDialogController ($scope, $mdDialog, PokiTimeModel) {
-        $scope.positions = PokiTimeModel.positions;
+    function AddPositionDialogController ($scope, $mdDialog, HackathonsModel) {
+        $scope.positions = HackathonsModel.positions;
 
         $scope.hide = function () {
             $mdDialog.hide();
@@ -192,7 +149,7 @@ var hacks = {
             var position = {
                 title: $scope.title
             };
-            PokiTimeModel.addPosition(position, function (err) {
+            HackathonsModel.addPosition(position, function (err) {
                 if (err) {
                     // $mdDialog.hide();
                     alert(err.location);
@@ -202,9 +159,9 @@ var hacks = {
             });
         };
     }
-    function AddUserDialogController ($scope, $mdDialog, PokiTimeModel) {
-        $scope.positions = PokiTimeModel.positions;
-        $scope.locations = PokiTimeModel.locations;
+    function AddUserDialogController ($scope, $mdDialog, HackathonsModel) {
+        $scope.positions = HackathonsModel.positions;
+        $scope.locations = HackathonsModel.locations;
         $scope.states = [
             'AK',
             'AL',
@@ -282,7 +239,7 @@ var hacks = {
                 },
                 phone: $scope.phone
             };
-            PokiTimeModel.addUser(user, function (err) {
+            HackathonsModel.addUser(user, function (err) {
                 if (err) {
                     // $mdDialog.hide();
                     alert(err.location);
@@ -292,10 +249,10 @@ var hacks = {
             });
         };
     }
-    function EditEmployeeDialogController ($scope, $mdDialog, PokiTimeModel, employee, location, position) {
+    function EditEmployeeDialogController ($scope, $mdDialog, HackathonsModel, employee, location, position) {
         console.log(employee);
-        $scope.positions = PokiTimeModel.positions;
-        $scope.locations = PokiTimeModel.locations;
+        $scope.positions = HackathonsModel.positions;
+        $scope.locations = HackathonsModel.locations;
         $scope.states = [
             'AK',
             'AL',
@@ -363,7 +320,7 @@ var hacks = {
         $scope.saveuser = function () {
             // TODO: for the location and positions are swapped in the dialog HTML
             console.log(employee._id);
-            PokiTimeModel.editUser(employee._id, employee, function (err) {
+            HackathonsModel.editUser(employee._id, employee, function (err) {
                 if (err) {
                     // $mdDialog.hide();
                     alert(err.location);
@@ -378,34 +335,6 @@ var hacks = {
             $mdSidenav('left').close().then(function () {
                 $log.debug('close LEFT is done');
             });
-        };
-    });
-    ngApp.directive('generateReport', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element) {
-                scope.$evalAsync(function () {
-                    element[0].style.height = element[0].getElementsByClassName('text')[0].offsetHeight + 10;
-                    var tweenTime = 0.5;
-                    TweenLite.to(element[0].parentElement, tweenTime, {
-                        scrollTop: element[0].parentElement.scrollHeight
-                    });
-                });
-            }
-        };
-    });
-    ngApp.directive('resizeHeight', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element) {
-                scope.$evalAsync(function () {
-                    element[0].style.height = element[0].getElementsByClassName('text')[0].offsetHeight + 10;
-                    var tweenTime = 0.5;
-                    TweenLite.to(element[0].parentElement, tweenTime, {
-                        scrollTop: element[0].parentElement.scrollHeight
-                    });
-                });
-            }
         };
     });
     ngApp.directive('keyListener', function () {
@@ -431,122 +360,6 @@ var hacks = {
             }
         };
     });
-    ngApp.directive('sendMessage', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element) {
-                element.on('click', function (event) {
-                    event.preventDefault();
-                    if ((scope.message !== '' && /\S/.test(scope.message)) || (scope.attachment && scope.attachment.length > 0)) {
-                        scope.ctrlChat.sendMessage(scope.message, scope.attachment);
-                        scope.attachment = '';
-                        scope.message = '';
-                        send_media_dialogue.removeAttribute('open');
-                        send_media_dialogue.removeAttribute('previewing');
-                        send_media_dialogue_preview_img.style.backgroundImage = 'url(' + event.target.result + ')';
-                        if (send_attachment_input.files.length > 0) {
-                            for (var i = 0; i < send_attachment_input.files.length; i++) {
-                                send_attachment_input.files[i] = undefined;
-                            }
-                        }
-                        scope.$apply();
-                    }
-                    send_message.focus();
-                });
-            }
-        };
-    });
-    ngApp.directive('attachMessage', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element) {
-                element.on('click', function (event) {
-                    event.preventDefault();
-                    if (send_media_dialogue.getAttribute('open') !== '') {
-                        send_media_dialogue.setAttribute('open', '');
-                    } else {
-                        send_media_dialogue.removeAttribute('open');
-                    }
-                });
-            }
-        };
-    });
-    ngApp.directive('attachDialogue', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element) {
-                element.on('change', function (event) {
-                    // event.preventDefault();
-                    if (event.srcElement.files && event.srcElement.files[0]) {
-                        var reader = new FileReader();
-                        reader.onload = function (e) {
-                            send_media_dialogue_preview_img.style.backgroundImage = 'url(' + e.target.result + ')';
-                            element[0].parentElement.parentElement.setAttribute('previewing', '');
-                            scope.attachment = e.target.result;
-                        };
-                        reader.readAsDataURL(event.srcElement.files[0]);
-                    }
-                });
-            }
-        };
-    });
-    ngApp.directive('cancelAttachDialogue', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element) {
-                element.on('click', function () {
-                    element[0].parentElement.removeAttribute('previewing');
-                });
-            }
-        };
-    });
-    ngApp.directive('chatsList', function () {
-        return {
-            restrict: 'E',
-            templateUrl: '/parts/common/chats_list.html',
-            controller: function ($scope) {
-                this.chats = $scope.ctrlMessenger.chats;
-            },
-            controllerAs: 'ctrlChatList'
-        };
-    });
-    ngApp.directive('chatListClick', function () {
-        return {
-            restrict: 'A',
-            link: function (scope, element, attrs) {
-                if (scope.chat.user !== undefined) {
-                    attrs.user = scope.chat.id;
-                    // element[0].setAttribute('user', scope.chat.id);
-                }
-                element.on('click', function () {
-                    scope.ctrlChat.switchChat(scope.chat.id, element[0]);
-                });
-                // TODO: change to set the actual current chat active
-                if (scope.chat.id === scope.ctrlMessenger.currentChat) {
-                    attrs.open = '';
-                    // element[0].setAttribute('open', '');
-                }
-            }
-        };
-    });
-    ngApp.directive('appToolbar', function () {
-        return {
-            restrict: 'E',
-            templateUrl: '/parts/common/app_toolbar.html',
-            controller: function ($scope) {
-                nav_drawer_icon.addEventListener('click', function () {
-                    $scope.ctrlNavDrawer.toggleNavDrawer();
-                });
-            },
-            controllerAs: 'ctrlAppToolbar'
-        };
-    });
-    ngApp.directive('toolbarMenuItem', function () {
-        return {
-            restrict: 'E',
-            templateUrl: '/parts/common/toolbar_menu_item.html'
-        };
-    });
     ngApp.directive('openOverflow', function () {
         return {
             restrict: 'A',
@@ -563,27 +376,6 @@ var hacks = {
         };
     });
 
-    ngApp.directive('rightSidebar', function () {
-        return {
-            restrict: 'E',
-            templateUrl: '/parts/common/right_sidebar.html',
-            controller: function ($scope) {
-                this.user = $scope.ctrlMessenger.chats[$scope.ctrlMessenger.currentChat];
-            },
-            controllerAs: 'ctrlRightSidebar'
-        };
-    });
-
-    ngApp.directive('fab', function () {
-        return {
-            restrict: 'E',
-            template: '<button id=\'FAB\' class=\'material light floating\'><i style="position: relative; left: -1px; top: 3px;" class="mdi mdi-chart-areaspline"></i></button>',
-            // controller: function ($scope) {
-            //     this.openPopup
-            // },
-            controllerAs: 'ctrlFAB'
-        };
-    });
     ngApp.directive('popupNewChat', function () {
         return {
             restrict: 'E',
