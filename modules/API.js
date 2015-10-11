@@ -127,6 +127,12 @@ module.exports = {
             });
             return;
         });
+        app.get(this.prefix + 'createObjectID', function (req, res) {
+            database.createObjectID(function (newObjectId) {
+                    res.send(newObjectId);
+                }
+            );
+        });
         app.post(this.prefix + 'login/local', passport.authenticate('local', {failureRedirect: '/'}),
             function (req, res) {
                 res.send('authenticated');
