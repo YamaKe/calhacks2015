@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/app.js"></script>
+  </head>
+  <body ng-app="starter">
+  <h1>Notify.js demo</h1>
+
+    <ion-pane>
+      <ion-header-bar class="bar-stable">
+        <h1 class="title">Ionic Blank Starter</h1>
+      </ion-header-bar>
+      <ion-content>
+      <h1>Notify.js demo</h1>
+      <button id="my-button">Notify Me!</button>
+      </ion-content>
+    </ion-pane>
+
+    <script src="notify.js"></script>
+    <script>
+        document.getElementById('my-button').addEventListener('click', function () {
+
+            function onShowNotification () {
+                console.log('notification is shown!');
+            }
+
+            function onCloseNotification () {
+                console.log('notification is closed!');
+            }
+
+            function onClickNotification () {
+                console.log('notification was clicked!');
+            }
+
+            function onErrorNotification () {
+                console.error('Error showing notification. You may need to request permission.');
+            }
+
+            function onPermissionGranted () {
+                console.log('Permission has been granted by the user');
+                doNotification();
+            }
+
+            function onPermissionDenied () {
+                console.warn('Permission has been denied by the user');
+            }
+
+            function doNotification () {
+                var myNotification = new Notify('Yo dawg!', {
+                    body: 'This is an awesome notification',
+                    tag: 'My unique id',
+                    notifyShow: onShowNotification,
+                    notifyClose: onCloseNotification,
+                    notifyClick: onClickNotification,
+                    notifyError: onErrorNotification,
+                    timeout: 4
+                });
+
+                myNotification.show();
+            }
+
+            if (!Notify.needsPermission) {
+                doNotification();
+            } else if (Notify.isSupported()) {
+                Notify.requestPermission(onPermissionGranted, onPermissionDenied);
+            }
+
+        }, false);
+    </script>
+
+    
+  </body>
+</html>
