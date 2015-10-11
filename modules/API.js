@@ -81,6 +81,24 @@ module.exports = {
                 }
             });
         });
+        app.post(this.prefix + 'checkInHacker', function (req, res) {
+            database.checkIfInHackathon(req.body.userID, req.body.hackathonID, function (userID) {
+                if (userID.error) {
+                    res.send(userID.error);
+                    console.log('Ithinkthisisafuckup');
+                } else {
+                    database.checkInHacker(req.body.userID, req.body.hackathonID, function (userID2) {
+                        console.log('Checking in ' + req.body.userID);
+                        if (userID2.error) {
+                            res.send(userID2);
+                        } else {
+                            res.send(userID2);
+                        }
+                    });
+                }
+            });
+
+        });
         app.get(this.prefix + 'hackathon', function (req, res) {
             database.getHackathons(function (hackathons) {
                 if (!hackathons.error) {
@@ -96,7 +114,8 @@ module.exports = {
                 admins:     req.body.admins,
                 hackers:    req.body.hackers,
                 pushboard:  [],
-                threadboard:[]
+                threadboard:[],
+                checkedInHackers: []
             };
             database.addHackathon(hackathon, function (_id) {
                 res.send(_id);

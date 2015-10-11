@@ -75,6 +75,19 @@ module.exports = {
             }
         });
     },
+    checkInHacker: function (userID, hackathonID, callback) {
+        db.hackathons.update(
+            {_id: mongojs.ObjectId(hackathonID)},
+            {$push: {checkedInHackers: mongojs.ObjectId(userID)}},
+            function (err, userID) {
+                if (err) {
+                    callback(err);
+                } else {
+                    callback(userID);
+                }
+            }
+        );
+    },
     addHackathon: function (hackathon, callback) {
         db.hackathons.save(hackathon, function (err, saved) {
             if (err) {
@@ -188,19 +201,21 @@ module.exports = {
             }
         );
     },
-    addReplyComment: function (comment, parentID, callback) {
-        db.hackathons.update(
-            {_id: ObjectId('53dea71a713d636e1fea705a'),},
-            {$push: {threadboard: comment}},
-            function (err, saved) {
-                if (err) {
-                    callback(err);
-                } else {
-                    callback(saved._id);
-                }
-            }
-        );
-    },
+    // addReplyComment: function (comment, parentID, callback) {
+    //     db.hackathons.findAndModfy({
+    //         query: {threadboard: { $elemMatch: { _id: "4fbd2b4b265a3" } } }
+    //     }
+    //         {_id: ObjectId('53dea71a713d636e1fea705a'),},
+    //         {$push: {threadboard: comment}},
+    //         function (err, saved) {
+    //             if (err) {
+    //                 callback(err);
+    //             } else {
+    //                 callback(saved._id);
+    //             }
+    //         }
+    //     );
+    // },
     editComment: function (hackathonID, commentID, newBody, callback) {
         db.hackathons.update({
             _id: mongojs.ObjectId(hackathonID),
