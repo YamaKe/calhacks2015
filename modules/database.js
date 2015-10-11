@@ -156,19 +156,6 @@ module.exports = {
             }
         )
     },
-    editUser: function (userID, update, callback) {
-        delete update._id;
-        console.log(update);
-        db.users.update({_id: mongojs.ObjectId(userID)}, {$set: update}, function (err, user) {
-            console.log(err);
-            console.log(user);
-            if (err) {
-                callback({error: err});
-            } else {
-                callback({id: user._id});
-            }
-        });
-    },
     editPush: function (hackathon_id, push_id, update, callback) {
         db.hackathons.update(
             { _id: mongojs.ObjectId(hackathon_id), pushboard: {_id: mongojs.ObjectId(push_id)} },
@@ -195,4 +182,62 @@ module.exports = {
             }
         )
     },
+    //Adds the user's id to the upvote array
+    //To-do: This should search the downvote array and remove them if found
+    upvote: function (hackathon_id, post_id, user_id, callback) {
+        // query upvote array and downvote array for user_id
+            // if both returned lists are empty, then put in a new upvote
+            // if the downvote isnt empty, then remove the user_id from downvote and add it to upvote
+            // if the upvote isnt empty, then remove the user_id from upvote
+
+        // async.parallel({
+        //     upvotes: function(callback){
+        //         db.hackathons.find({upvotes: user_id}, function (err, hackathons) {
+        //             if (err) {
+        //                 callback(err);
+        //             } else {
+        //                 callback(users);
+        //             }
+        //         });
+        //     },
+        //     downvotes: function(callback){
+        //         db.hackathons.find({upvotes: user_id}, function (err, hackathons) {
+        //             if (err) {
+        //                 callback(err);
+        //             } else {
+        //                 callback(users);
+        //             }
+        //         });
+        //     },
+        // function(err, results) {
+        //     // results is now equals to: {one: 1, two: 2}
+        // });
+
+        db.hackathons.update(
+            { _id: mongojs.ObjectId(hackathon_id), post_id},
+            { $push: {upvotes : {id: mongojs.ObjectId(user_id)} } },
+            function (err, saved) {
+                if(err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        )
+    }
+    //Adds the user's id to the downvote array
+    //To-do: This should search the upvote array and remove them if found
+    downvote: function (hackathon_id, post_id, user_id, callback) {
+        db.hackathons.update(
+            { _id: mongojs.ObjectId(hackathon_id), post_id},
+            { $push: {downvotes : {id: mongojs.ObjectId(user_id)} } },
+            function (err, saved) {
+                if(err) {
+                    callback(err);
+                } else {
+                    callback(saved._id);
+                }
+            }
+        )
+    }
 };
