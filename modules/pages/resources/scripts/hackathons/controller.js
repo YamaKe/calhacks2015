@@ -119,8 +119,9 @@ var hacks = {
                 priviliged: false
             }
         };
+        $scope.discussions = [];
         HackathonsModel.getDiscussions({hackathon_id: hackathon._id, limit: 25}, function (threads) {
-            $scope.discussions = threads;
+            $scope.discussions = threads[0].threadboard;
         });
 
         $scope.hide = function () {
@@ -337,6 +338,42 @@ var hacks = {
             $mdSidenav('left').close().then(function () {
                 $log.debug('close LEFT is done');
             });
+        };
+    });
+    ngApp.directive('discussion', function () {
+        return {
+            scope: {
+                discussion: '='
+            },
+            replace: true,
+            restrict: 'E',
+            template: '<ul><comment ng-repeat="comment in discussion" comment="comment"></comment></ul>'
+            // controller: function ($scope, $element) {
+            //
+            // },
+            // controllerAs: 'ctrlComment'
+        };
+    });
+    ngApp.directive('comment', function ($compile, HackathonsModel) {
+        return {
+            scope: {
+                comment: '='
+            },
+            restrict: 'E',
+            templateUrl: '/parts/reports/comment.html',
+            // template: '<li>{{comment.message}}</li>',
+            link: function (scope, element) {
+                // check if this member has children
+                if (angular.isArray(scope.comment.replies)) {
+                    $compile('<discussion discussion="comment.replies"></discussion>')(scope, function (cloned) {
+                        element.append(cloned);
+                    });
+                }
+            },
+            controller: function ($scope) {
+                $scope.usersDict = HackathonsModel.usersDict;
+            },
+            controllerAs: 'ctrlComment'
         };
     });
     ngApp.directive('keyListener', function () {
@@ -567,4 +604,10 @@ var hacks = {
             }
         };
     });
+
+    ngApp.filter('trusted', ['$sce', function ($sce) {
+        return function (url) {
+            return $sce.trustAsResourceUrl(url);
+        };
+    }]);
 })();

@@ -1,0 +1,18 @@
+<li class="comment">
+    <div class="voting">
+        <div class="score">
+            {{(comment.upvotes.length / (comment.upvotes.length + comment.downvotes.length)) * 100}}%
+        </div>
+        <div class="upvote"></div>
+        <div class="downvote"></div>
+        <div class="background">
+            <div></div><span></span>
+        </div>
+    </div>
+    <div class="user">
+        <a ng-href="//u/{{comment.user}}">{{comment.user}}</a>
+    </div>
+    <div class="comment">
+        {{comment.message}}
+    </div>
+</li>

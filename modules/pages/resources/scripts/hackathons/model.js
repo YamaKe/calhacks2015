@@ -6,7 +6,7 @@ String.prototype.replaceAll = function (find, replace) {
     ngApp.factory('HackathonsModel', ['$resource', function ($resource) {
         var HackathonsResource = $resource('/api/hackathon/', {ID: '@ID', lat: '@lat', lon: '@lon'}, {isArray: true});
         var DiscussionsResource = $resource('/api/discussion/', {hackathon_id: '@hackathon_id', limit: '@limit', sort: '@sort'}, {isArray: true});
-        var EmployeesResource = $resource('/api/user/', {}, {isArray: false});
+        var UsersResource = $resource('/api/user/', {}, {isArray: false});
         var AddEmployeeResource = $resource('/api/user/', {first_name: '@first_name', last_name: '@last_name', position: '@position', location: '@location', hourly_rate: '@hourly_rate'}, {isArray: false});
         var EditEmployeeResource = $resource('/api/user/', {userID: '@userID', update: '@update'}, {isArray: false, update: {method: 'PUT'}});
         var PositionsResource = $resource('/api/position/', {}, {isArray: false});
@@ -29,10 +29,10 @@ String.prototype.replaceAll = function (find, replace) {
                 factory.positionsDict[positions[i]._id] = positions[i];
             }
         });
-        factory.employeesDict = [];
-        factory.employees = EmployeesResource.query({}, function (employees) {
-            for (var i = 0; i < employees.length; i++) {
-                factory.employeesDict[employees[i]._id] = employees[i];
+        factory.usersDict = [];
+        factory.users = UsersResource.query({}, function (users) {
+            for (var i = 0; i < users.length; i++) {
+                factory.usersDict[users[i]._id] = users[i];
             }
         });
         factory.locationsDict = [];
