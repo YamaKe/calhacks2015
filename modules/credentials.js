@@ -9,7 +9,7 @@ module.exports = {
     //    privateKey: fs.readFileSync('./modules/certificates/key.pem')
     // },
     mongodb: {
-        username: 'testtest',
-        password: 'p@s$w0rd'
+        username: 'runhack',
+        password: 'runhack-pass'
     }
 };
